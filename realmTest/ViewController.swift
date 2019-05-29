@@ -20,10 +20,22 @@ class ViewController: UIViewController {
     @IBOutlet weak var ageLabel: UITextField!
     @IBOutlet weak var resultTextView: UITextView!
     
+    var personArray: Results<Person>?
+    
+    let formatter: DateFormatter = {
+        let f = DateFormatter()
+        f.dateStyle = .long
+        f.timeStyle = .none
+        f.locale = Locale(identifier: "KO_kr")
+        return f
+    } ()
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        print(NSHomeDirectory())
+        //print(NSHomeDirectory())
+        
         
     }
     
@@ -58,14 +70,18 @@ class ViewController: UIViewController {
         resultTextView.text = ""
         
         let realm = try! Realm()
-        let vals = realm.objects(Person.self)
+        personArray = realm.objects(Person.self)
         
-        if vals.count == 0 {
+        if personArray!.count == 0 {
             resultTextView.text = "데이터 없음"
         } else {
-            for i in vals {
+            for i in personArray! {
                 resultTextView.text = resultTextView.text! + "Name: \(i.name), Age: \(i.age)\n"
+                
             }
+        }
+        for item in personArray! {
+            print("personArray = \(item)")
         }
         
     }
